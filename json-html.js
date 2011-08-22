@@ -1,4 +1,4 @@
-//  Copyright (c) 2012 David Caldwell,  All Rights Reserved.
+//  Copyright (c) 2012 David Caldwell and Jim Radford,  All Rights Reserved.
 
 (function($) {
     var orig = $.fn.html
