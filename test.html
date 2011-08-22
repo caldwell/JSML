@@ -1,0 +1,29 @@
+<html>
+  <head>
+    <title></title>
+  </head>
+  <body>
+    <h1>Test</h1>
+
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.js"></script>
+    <script type="text/javascript" src="json-html.js"></script>
+
+    <div id="test-div"></div>
+    <div class="multiple-div"></div>
+    <div class="multiple-div"></div>
+    <div class="multiple-div"></div>
+    <div id="old-jquery"></div>
+
+    <script type="text/javascript">
+        var table = ["table", { border: "true" },
+                     ["tbody",
+                      ["tr", ["td", "Cell 0,0"], ["td", "Cell 1,0"], ["td", "Cell 2,0"]],
+                      ["tr", ["td", "Cell 0,1"], ["td", "Cell 1,1"], ["td", "Cell 2,1"]],
+                      ["tr", ["td", "Cell 0,2"], ["td", "Cell 1,2"], ["td", "Cell 2,2"]]]];
+        $("#test-div").html(table);
+        $(".multiple-div").html(table);
+        $("#old-jquery").html("<h1>old</h1><ul><li>list item 1</li><li>list item 2</li></ul>");
+    </script>
+
+  </body>
+</html>
