@@ -1,11 +1,10 @@
 //  Copyright (c) 2012 David Caldwell,  All Rights Reserved.
 
 (function($) {
-    $.fn.myPlugin = function() {
-        var orig = $.fn.html
-        $.fn.html = function(value) {
-            if (typeof value != 'Array')
-                return orig(value)
-        }
+    var orig = $.fn.html
+    $.fn.html = function(value) {
+        if (value.constructor !== Array)
+            return orig.call(this, value)
+        return this;
     };
 })(jQuery);
