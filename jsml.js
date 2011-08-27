@@ -42,6 +42,9 @@
             }
             else if (typeof a.nodeType !== "undefined")
                 el.appendChild(a);
+            else if (a.constructor === $)
+                for ( var $i = 0, $l = a.length; $i < $l; $i++ )
+                    el.appendChild(a[$i]);
             else if (a.constructor === Object)
                 for (var p in a) {
                     var ap = a[p];
