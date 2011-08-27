@@ -1,11 +1,7 @@
 //  Copyright (c) 2012 David Caldwell and Jim Radford,  All Rights Reserved.
 
 (function($) {
-    var orig = $.fn.html
-    $.fn.html = function(value) {
-        if (value.constructor !== Array)
-            return orig.call(this, value)
-
+    $.fn.jsml = function(value) {
         var el = doc(value);
 
         for ( var i = 0, l = this.length; i < l; i++ ) {
