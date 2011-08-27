@@ -26,11 +26,7 @@
         };
         if (array.constructor === String)
             return document.createTextNode(array);
-        var el = array[0];
-        if (typeof el.nodeType === "undefined")
-            el = el.charAt(0) == "#"
-            ? document.getElementById(el.substring(1))
-            : document.createElement(el);
+        var el = document.createElement(array[0]);
 
         for (var i=1, l=array.length; i<l; i++) {
             var a = array[i];
