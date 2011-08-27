@@ -17,6 +17,10 @@
         return this;
     };
 
+    $.fn.jsml.make = function (value) {
+        return $($.fn.jsml.dom(value));
+    }
+
     $.fn.jsml.dom = function (array) {
         var valid = function (a, array) {
             if (a === undefined || a === null)
