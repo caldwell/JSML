@@ -2,7 +2,7 @@
 
 (function($) {
     $.fn.jsml = function(value) {
-        var el = doc(value);
+        var el = $.fn.jsml.dom(value);
 
         for ( var i = 0, l = this.length; i < l; i++ ) {
             // Remove element nodes and prevent memory leaks
@@ -14,7 +14,7 @@
         return this;
     };
 
-    var doc = function (array) {
+    $.fn.jsml.dom = function (array) {
         var valid = function (a, array) {
             if (a === undefined || a === null)
                 printf("undefined value in: %j\n", array);
@@ -36,9 +36,9 @@
             if (a.constructor === Array) {
                 if (a.length === 0 || a[0].constructor === Array)
                     for (var j in a) // [[],[],...] ==> [],[],...
-                        el.appendChild(doc(a[j]))
+                        el.appendChild($.fn.jsml.dom(a[j]))
                 else
-                    el.appendChild(doc(a));
+                    el.appendChild($.fn.jsml.dom(a));
             }
             else if (typeof a.nodeType !== "undefined")
                 el.appendChild(a);
