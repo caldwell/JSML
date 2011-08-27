@@ -13,6 +13,9 @@
     <div class="multiple-div"></div>
     <div class="multiple-div"></div>
     <div id="old-jquery"></div>
+    <div id="my-element"></div>
+    <div id="array-test"></div>
+    <div id="outside-els-test"></div>
 
     <script type="text/javascript">
         var table = ["table", { border: "true" },
@@ -23,6 +26,26 @@
         $("#test-div").jsml(table);
         $(".multiple-div").jsml(table);
         $("#old-jquery").html("<h1>old</h1><ul><li>list item 1</li><li>list item 2</li></ul>");
+
+        var a_random_variable = "</li> uh oh, bad stuff in here <script>";
+        $("#my-element").jsml(["ul",
+                               ["li", { style: { backgroundColor: "red" } }, "First item"],
+                               ["li",
+                                ["img", { src: "http://www.google.com/favicon.ico", title: "A title"},
+                                 { alt: "Some Alt-text" }], a_random_variable]]);
+
+
+        var a = [["li", "Item 1"],
+                 ["li", "Item 2"],
+                 ["li", "Item 3"]];
+        $("#array-test").jsml(["div", ["h1", "Nested array"], ["ul", a]]);
+
+        var li1 = document.createElement("li");
+        li1.appendChild(document.createTextNode("document.create()"));
+        $("#outside-els-test").jsml(["div",
+                                     ["h1", "Outside elements"],
+                                     ["ul", li1, $("<li>jQuery element 1</li><li>jQuery element 2</li>")]]);
+
     </script>
 
   </body>
