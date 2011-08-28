@@ -7,13 +7,12 @@
     $.fn.jsml = function(value) {
         var el = $.fn.jsml.dom(value);
 
-        for ( var i = 0, l = this.length; i < l; i++ ) {
-            // Remove element nodes and prevent memory leaks
-            if ( this[i].nodeType === 1 ) {
-                jQuery.cleanData( this[i].getElementsByTagName("*") );
+        this.empty();
+
+        for ( var i = 0, l = this.length; i < l; i++ )
+            if ( this[i].nodeType === 1 )
                 this[i].appendChild(el.cloneNode(true));
-            }
-        }
+
         return this;
     };
 
