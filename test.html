@@ -16,6 +16,7 @@
     <div id="my-element"></div>
     <div id="array-test"></div>
     <div id="outside-els-test"></div>
+    <ul  id="multiple-args-test"></div>
 
     <script type="text/javascript">
         var table = ["table", { border: "true" },
@@ -46,6 +47,9 @@
                                      ["h1", "Outside elements"],
                                      ["ul", li1, $("<li>jQuery element 1</li><li>jQuery element 2</li>")]]);
 
+        $("#multiple-args-test").jsml(["li", "arg 1"],
+                                      ["li", "arg 2"],
+                                      ["li", "arg 3"]);
     </script>
 
   </body>

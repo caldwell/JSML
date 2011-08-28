@@ -5,13 +5,16 @@
 
 (function($) {
     $.fn.jsml = function(value) {
-        var el = $.fn.jsml.dom(value);
+        var el = $.fn.jsml.dom.apply(this, arguments);
+        if (arguments.length == 1)
+            el = [el]
 
         this.empty();
 
-        for ( var i = 0, l = this.length; i < l; i++ )
+        for (var i=0, l=this.length; i < l; i++)
             if ( this[i].nodeType === 1 )
-                this[i].appendChild(el.cloneNode(true));
+                for (var e=0; e < el.length; e++)
+                    this[i].appendChild(el[e].cloneNode(true));
 
         return this;
     };
@@ -21,6 +24,13 @@
     }
 
     $.fn.jsml.dom = function (array) {
+        if (arguments.length > 1) {
+            var results = []
+            for (var i=0; i<arguments.length; i++)
+                results[i] = $.fn.jsml.dom(arguments[i])
+            return results;
+        }
+
         var valid = function (a, array) {
             if (a === undefined || a === null)
                 printf("undefined value in: %j\n", array);
