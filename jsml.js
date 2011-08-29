@@ -49,6 +49,13 @@
                 if (a.length === 0 || a[0].constructor === Array)
                     for (var j in a) // [[],[],...] ==> [],[],...
                         el.appendChild($.fn.jsml.dom(a[j]))
+                else if (a.length === 0 || a[0].constructor === $)
+                    for (var j in a) // [[],[],...] ==> [],[],...
+                        for ( var $i = 0, $l = a[j].length; $i < $l; $i++ )
+                            el.appendChild(a[j][$i]);
+                else if (a.length === 0 || typeof a[0].nodeType !== "undefined")
+                    for (var j in a) // [[],[],...] ==> [],[],...
+                        el.appendChild(a[j]);
                 else
                     el.appendChild($.fn.jsml.dom(a));
             }

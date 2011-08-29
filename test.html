@@ -17,6 +17,8 @@
     <div id="array-test"></div>
     <div id="outside-els-test"></div>
     <ul  id="multiple-args-test"></ul>
+    <div id="jquery-nested-array"></div>
+    <div id="dom-nested-array"></div>
 
     <script type="text/javascript">
         var table = ["table", { border: "true" },
@@ -50,6 +52,9 @@
         $("#multiple-args-test").jsml(["li", "arg 1"],
                                       ["li", "arg 2"],
                                       ["li", "arg 3"]);
+
+        $("#jquery-nested-array").jsml(["h1", "jQuery Nested"], ["ul", [$("<li>1</li>"), $("<li>2</li>"), $("<li>3</li>")]])
+        $("#dom-nested-array").jsml(["h1", "DOM Nested"], ["ul", [$.fn.jsml.dom(["li", "1"]), $.fn.jsml.dom(["li", "2"]), $.fn.jsml.dom(["li", "3"])]])
     </script>
 
   </body>
