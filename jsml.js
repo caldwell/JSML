@@ -33,7 +33,7 @@
 
         var valid = function (a, array) {
             if (a === undefined || a === null)
-                printf("undefined value in: %j\n", array);
+                throw("undefined value in: " + JSON.stringify(array));
             else
                 return true;
         };
