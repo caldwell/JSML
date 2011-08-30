@@ -46,17 +46,16 @@
             if (!valid(a, array))
                 continue;
             if (a.constructor === Array) {
-                if (a.length === 0 || a[0].constructor === Array)
+                if (a.length === 0 || (a[0].constructor === Array || a[0].constructor === $ || typeof a[0].nodeType !== "undefined")) {
                     for (var j in a) // [[],[],...] ==> [],[],...
-                        el.appendChild($.fn.jsml.dom(a[j]))
-                else if (a.length === 0 || a[0].constructor === $)
-                    for (var j in a) // [[],[],...] ==> [],[],...
-                        for ( var $i = 0, $l = a[j].length; $i < $l; $i++ )
-                            el.appendChild(a[j][$i]);
-                else if (a.length === 0 || typeof a[0].nodeType !== "undefined")
-                    for (var j in a) // [[],[],...] ==> [],[],...
-                        el.appendChild(a[j]);
-                else
+                        if (a[j].constructor === Array)
+                            el.appendChild($.fn.jsml.dom(a[j]))
+                        else if (a[j].constructor === $)
+                            for ( var $i = 0, $l = a[j].length; $i < $l; $i++ )
+                                el.appendChild(a[j][$i]);
+                        else if (typeof a[j].nodeType !== "undefined")
+                            el.appendChild(a[j]);
+                } else
                     el.appendChild($.fn.jsml.dom(a));
             }
             else if (typeof a.nodeType !== "undefined")
