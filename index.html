@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="JSML : Create XSS free DOM trees easily and beautifully from jQuery" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>JSML</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/caldwell/JSML">Fork Me on GitHub</a>
+
+          <h1 id="project_title">JSML</h1>
+          <h2 id="project_tagline">Create XSS free DOM trees easily and beautifully from jQuery</h2>
+
+          <section id="downloads">
+            <a class="zip_download_link" href="https://github.com/caldwell/JSML/zipball/master">Download this project as a .zip file</a>
+            <a class="tar_download_link" href="https://github.com/caldwell/JSML/tarball/master">Download this project as a tar.gz file</a>
+          </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h2>What is JSML?</h2>
+
+<p>JSML is a compact representation of HTML using Javascript arrays and objects.  JSML is also a small jQuery plug-in that allows you to construct DOM elements from these structured Javascript objects. Here's a quick example:</p>
+
+<div class="highlight">
+<pre><span class="nx">$</span><span class="p">(</span><span class="s2">"#my-element"</span><span class="p">).</span><span class="nx">jsml</span><span class="p">([</span><span class="s2">"a"</span><span class="p">,</span> <span class="p">{</span> <span class="nx">href</span><span class="o">:</span> <span class="s2">"<a href="http://example.com">http://example.com</a>"</span> <span class="p">},</span> <span class="s2">"This is a &lt;link&gt;"</span> <span class="p">])</span>
+</pre>
+</div>
+
+
+<p>That finds the div identified by "my-element" and replaces its contents with:</p>
+
+<div class="highlight">
+<pre><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"<a href="http://example.com">http://example.com</a>"</span><span class="nt">&gt;</span>This is a <span class="ni">&amp;lt;</span>link<span class="ni">&amp;gt;</span><span class="nt">&lt;/a&gt;</span>
+</pre>
+</div>
+
+
+<p>...except that there's never an actual HTML string created. JSML uses <code>document.createElement()</code>, <code>document.createTextNode()</code> and <code>document.appendChild()</code> to build up the DOM representation directly which means that you never have to worry about quoting HTML entities which helps prevent XSS (<a href="https://secure.wikimedia.org/wikipedia/en/wiki/Cross_site_scripting">cross site scripting</a>) attacks by being secure by default.</p>
+
+<p>Here's a slightly more complicated example:</p>
+
+<div class="highlight">
+<pre>  <span class="nx">$</span><span class="p">(</span><span class="s2">"#my-element"</span><span class="p">).</span><span class="nx">jsml</span><span class="p">([</span><span class="s2">"ul"</span><span class="p">,</span>
+                         <span class="p">[</span><span class="s2">"li"</span><span class="p">,</span> <span class="p">{</span> <span class="nx">style</span><span class="o">:</span> <span class="p">{</span> <span class="nx">backgroundColor</span><span class="o">:</span> <span class="s2">"red"</span> <span class="p">}</span> <span class="p">},</span> <span class="s2">"First item"</span><span class="p">],</span>
+                         <span class="p">[</span><span class="s2">"li"</span><span class="p">,</span>
+                          <span class="p">[</span><span class="s2">"img"</span><span class="p">,</span> <span class="p">{</span> <span class="nx">src</span><span class="o">:</span> <span class="s2">"myimage.png"</span><span class="p">,</span> <span class="nx">title</span><span class="o">:</span> <span class="s2">"A title"</span><span class="p">},</span>
+                                  <span class="p">{</span> <span class="nx">alt</span><span class="o">:</span> <span class="s2">"Some Alt-text"</span> <span class="p">}],</span> <span class="s2">"Second item"</span><span class="p">],</span>
+                         <span class="nx">$</span><span class="p">(</span><span class="s2">"&lt;li&gt;raw html item&lt;/li&gt;"</span><span class="p">)])</span>
+</pre>
+</div>
+
+
+<p>Additional things to notice:</p>
+
+<ul>
+<li>The basic idea is that new arrays signal new elements. The first item in an array defines what type of element. The rest of the items in an array are either attributes or child elements.</li>
+<li>Objects (enclosed in "'{}'") let you define an element's attributes. You can have multiple objects in the array--they simply accumulate. If you have duplicate keys in the objects then the last one in the array wins.</li>
+<li>As a special case you can drill down into the style with a nested object (though it's not necessarily the best thing to do).</li>
+<li>Style and attribute names are the standard Javascript equivalents ("border-top" is "borderTop", "class" is "className").</li>
+<li>You can use jQuery to drop in unquoted HTML strings if you absolutely need to.</li>
+</ul><h2>Advanced Usage</h2>
+
+<p>JSML has special support for 'map' functions (Underscore's is shown here):</p>
+
+<div class="highlight">
+<pre><span class="nx">$</span><span class="p">(</span><span class="s2">"#my-element"</span><span class="p">).</span><span class="nx">jsml</span><span class="p">([</span><span class="s2">"ul"</span><span class="p">,</span>
+    <span class="nx">_</span><span class="p">.</span><span class="nx">map</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">num</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="p">[</span><span class="s2">"li"</span><span class="p">,</span> <span class="s2">"Item "</span><span class="o">+</span><span class="nx">num</span><span class="p">]</span> <span class="p">})]);</span>
+</pre>
+</div>
+
+
+<p>If you're paying attention you'll notice that the structure passed to the 'jsml()' function looks like this:</p>
+
+<div class="highlight">
+<pre>  <span class="p">[</span><span class="s2">"ul"</span><span class="p">,</span> <span class="p">[[</span><span class="s2">"li"</span><span class="p">,</span> <span class="s2">"Item 1"</span><span class="p">],</span>
+          <span class="p">[</span><span class="s2">"li"</span><span class="p">,</span> <span class="s2">"Item 2"</span><span class="p">],</span>
+          <span class="p">[</span><span class="s2">"li"</span><span class="p">,</span> <span class="s2">"Item 3"</span><span class="p">]]]</span>
+</pre>
+</div>
+
+
+<p>...which has extra array around the list items unlike the standard syntax:</p>
+
+<div class="highlight">
+<pre>  <span class="p">[</span><span class="s2">"ul"</span><span class="p">,</span> <span class="p">[</span><span class="s2">"li"</span><span class="p">,</span> <span class="s2">"Item 1"</span><span class="p">],</span>
+         <span class="p">[</span><span class="s2">"li"</span><span class="p">,</span> <span class="s2">"Item 2"</span><span class="p">],</span>
+         <span class="p">[</span><span class="s2">"li"</span><span class="p">,</span> <span class="s2">"Item 3"</span><span class="p">]]</span>
+</pre>
+</div>
+
+
+<p>JSML automatically flattens this extra level of arrays to make using 'map()' convenient. This is also useful for passing in an array of uniform items in a JSML structure (which means there's usually no need to use 'concat()').</p>
+
+<div class="highlight">
+<pre>  <span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="nx">a</span><span class="p">.</span><span class="nx">push</span><span class="p">([</span><span class="s2">"li"</span><span class="p">,</span> <span class="s2">"Item 1"</span><span class="p">],</span>
+         <span class="p">[</span><span class="s2">"li"</span><span class="p">,</span> <span class="s2">"Item 2"</span><span class="p">]);</span>
+  <span class="nx">$</span><span class="p">(</span><span class="s2">"#my-element"</span><span class="p">).</span><span class="nx">jsml</span><span class="p">([</span><span class="s2">"ul"</span><span class="p">,</span> <span class="nx">a</span><span class="p">]);</span>
+</pre>
+</div>
+
+
+<p>You can also pass DOM element objects and jQuery objects and those will be appended:</p>
+
+<div class="highlight">
+<pre>  <span class="kd">var</span> <span class="nx">li</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">"li"</span><span class="p">);</span>
+  <span class="nx">li</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="s2">"Standard DOM element"</span><span class="p">));</span>
+  <span class="nx">$</span><span class="p">(</span><span class="s2">"#my-element"</span><span class="p">).</span><span class="nx">jsml</span><span class="p">([</span><span class="s2">"ul"</span><span class="p">,</span> <span class="nx">li</span><span class="p">,</span> <span class="nx">$</span><span class="p">(</span><span class="s2">"&lt;li&gt;jQuery element&lt;/li&gt;"</span><span class="p">)]);</span>
+</pre>
+</div>
+
+
+<p>If you wish to create detached DOM elements you can call either <code>$.fn.jsml.make()</code> which returns a jQuery wrapped object, or, <code>$.fn.jsml.dom()</code> which returns a standard DOM element object.</p>
+
+<h2>How Should I Pronounce This?</h2>
+
+<p>There are 3 ways to pronounce it, depending on what you think of the project. If you think it's cool you can call it "Jay-Smile", since its compact representation and XSS resistance makes you happy. If you are neutral, you can just call it "Jay Ess Emm Ell". If you hate it, feel free to call it "Jay-Smell" (and make sure to really sneer when you say it).</p>
+
+<h2>Author, Copyright, and License</h2>
+
+<p>Copyright © 2009-2012 by David Caldwell &lt;david@porkrind.org&gt; and Jim Radford &lt;radford@blackbean.org&gt;</p>
+
+<p>The JSML source code is licensed under the Mozilla Public License. It is available here: <a href="http://mozilla.org/MPL/2.0/">http://mozilla.org/MPL/2.0/</a></p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">JSML maintained by <a href="https://github.com/caldwell">caldwell</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
