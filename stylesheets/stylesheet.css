@@ -202,8 +202,9 @@ ul, ol, dl {
 }
 
 ul li {
-  list-style: inside;
-  padding-left: 20px;
+  list-style: outside;
+  margin-left: 20px;
+  margin-bottom: 1em;
 }
 
 ol li {
