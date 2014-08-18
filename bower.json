@@ -1,0 +1,28 @@
+{
+  "name": "jsml",
+  "main": "jsml.js",
+  "homepage": "http://jsml.org/",
+  "authors": [
+    "David Caldwell <david@porkrind.org>",
+    "Jim Radford <radford@blackbean.org>"
+  ],
+  "description": "Create XSS free DOM trees easily and beautifully from jQuery",
+  "dependencies": {
+      "jquery": ">=1.8.0"
+  },
+  "moduleType": [
+    "jquery"
+  ],
+  "keywords": [
+    "json",
+    "html"
+  ],
+  "license": "MPL-2.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
