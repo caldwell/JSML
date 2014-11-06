@@ -4,10 +4,11 @@
 // You can obtain one at http://mozilla.org/MPL/2.0/.
 
 (function($) {
-    var jsml = function(value) {
+    "use strict";
+    var jsml = function() {
         var el = jsml.dom.apply(this, arguments);
-        if (arguments.length == 1)
-            el = [el]
+        if (arguments.length === 1)
+            el = [el];
 
         this.empty();
 
@@ -21,13 +22,15 @@
 
     jsml.make = function (value) {
         return $(jsml.dom(value));
-    }
+    };
 
     jsml.dom = function (array) {
+        var i, j, l, $i, $l;
+
         if (arguments.length > 1) {
-            var results = []
-            for (var i=0; i<arguments.length; i++)
-                results[i] = jsml.dom(arguments[i])
+            var results = [];
+            for (i=0; i<arguments.length; i++)
+                results[i] = jsml.dom(arguments[i]);
             return results;
         }
 
@@ -41,17 +44,17 @@
             return document.createTextNode(array);
         var el = document.createElement(array[0]);
 
-        for (var i=1, l=array.length; i<l; i++) {
+        for (i=1, l=array.length; i<l; i++) {
             var a = array[i];
             if (!valid(a, array))
                 continue;
             if (a.constructor === Array) {
                 if (a.length === 0 || (a[0].constructor === Array || a[0].constructor === $ || typeof a[0].nodeType !== "undefined")) {
-                    for (var j in a) // [[],[],...] ==> [],[],...
+                    for (j in a) // [[],[],...] ==> [],[],...
                         if (a[j].constructor === Array)
-                            el.appendChild(jsml.dom(a[j]))
+                            el.appendChild(jsml.dom(a[j]));
                         else if (a[j].constructor === $)
-                            for ( var $i = 0, $l = a[j].length; $i < $l; $i++ )
+                            for ($i = 0, $l = a[j].length; $i < $l; $i++ )
                                 el.appendChild(a[j][$i]);
                         else if (typeof a[j].nodeType !== "undefined")
                             el.appendChild(a[j]);
@@ -61,13 +64,13 @@
             else if (typeof a.nodeType !== "undefined")
                 el.appendChild(a);
             else if (a.constructor === $)
-                for ( var $i = 0, $l = a.length; $i < $l; $i++ )
+                for ($i = 0, $l = a.length; $i < $l; $i++ )
                     el.appendChild(a[$i]);
             else if (a.constructor === Object)
                 for (var p in a) {
                     var ap = a[p];
                     if (valid(ap,a) && ap.constructor === Object)
-                        for (s in ap)
+                        for (var s in ap)
                             el[p][s] = ap[s];
                     else
                         el[p] = ap;
@@ -76,7 +79,7 @@
                 el.appendChild(document.createTextNode(a));
         }
         return el;
-    }
+    };
 
     $.fn.jsml = jsml;
 })(jQuery);
