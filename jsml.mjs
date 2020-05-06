@@ -5,12 +5,7 @@
 
 function jsml(array, _document) {
     if (!_document) _document = window.document;
-    var valid = function (a, array) {
-        if (a === undefined || a === null)
-            throw("undefined value in: " + JSON.stringify(array));
-        else
-            return true;
-    };
+    var valid = (a, array) => a !== undefined && a !== null || (() => { throw("undefined value in: " + JSON.stringify(array)) })();
     if (array.constructor === String) // allows for jsml("Plain text")
         return _document.createTextNode(array);
 
