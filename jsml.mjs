@@ -9,8 +9,9 @@ function jsml(array, _document) {
     if (array.constructor === String) // allows for jsml("Plain text")
         return _document.createTextNode(array);
 
+    if (typeof array.nodeType === "number") return array; // jsml(document.createElement('div')) => the element
     if (!array.length) return _document.createDocumentFragment(); // [['div'],[]] => [['div']]
-    if (array[0].constructor === Array) { // [[],[],...] ==> [],[],...
+    if (array[0].constructor === Array || typeof array[0].nodeType === "number") { // [[],[],...] ==> [],[],...
         var f = _document.createDocumentFragment();
         for (let e of array)
             if (valid(e, array))
