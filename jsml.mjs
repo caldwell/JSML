@@ -6,11 +6,11 @@
 function jsml(array, _document) {
     if (!_document) _document = window.document;
     var valid = (a, array) => a !== undefined && a !== null || (() => { throw("undefined value in: " + JSON.stringify(array)) })();
-    if (array.constructor === String) // allows for jsml("Plain text")
-        return _document.createTextNode(array);
 
+    if (array.constructor === String) return _document.createTextNode(array); // allows for jsml("Plain text")
     if (typeof array.nodeType === "number") return array; // jsml(document.createElement('div')) => the element
     if (!array.length) return _document.createDocumentFragment(); // [['div'],[]] => [['div']]
+
     if (array[0].constructor === Array || typeof array[0].nodeType === "number") { // [[],[],...] ==> [],[],...
         var f = _document.createDocumentFragment();
         for (let e of array)
