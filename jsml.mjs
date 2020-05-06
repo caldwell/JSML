@@ -13,7 +13,8 @@ function jsml(array, _document) {
     if (array[0].constructor === Array) { // [[],[],...] ==> [],[],...
         var f = _document.createDocumentFragment();
         for (let e of array)
-            f.appendChild(jsml(e, _document));
+            if (valid(e, array))
+                f.appendChild(jsml(e, _document));
         return f;
     }
 
