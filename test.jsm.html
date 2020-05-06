@@ -44,8 +44,7 @@
                                                                         ["li", "arg 2"],
                                                                         ["li", "arg 3"]]));
 
-        document.getElementById("dom-nested-array")
-            .appendChild(jsml([["h1", "DOM Nested 1"], ["div", [jsml(["b", "1"]), jsml(["i", "2"]), jsml(["span", {style:{textDecoration:"underline"}},"3"])]]]));
+        jsml(["#dom-nested-array", ["h1", "DOM Nested 1"], ["div", [jsml(["b", "1"]), jsml(["i", "2"]), jsml(["span", {style:{textDecoration:"underline"}},"3"])]]]);
 
         document.getElementById("empty-array-test").appendChild(jsml([["li", "arg 1"], [],
                                                                       ["li", "arg 2"], [],
