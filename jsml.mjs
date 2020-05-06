@@ -17,8 +17,8 @@ function jsml(array, _document) {
     if (!array.length) return _document.createDocumentFragment(); // [['div'],[]] => [['div']]
     if (array[0].constructor === Array) { // [[],[],...] ==> [],[],...
         var f = _document.createDocumentFragment();
-        for (var i=0, l=array.length; i<l; i++)
-            f.appendChild(jsml(array[i], _document));
+        for (let e of array)
+            f.appendChild(jsml(e, _document));
         return f;
     }
 
@@ -28,8 +28,7 @@ function jsml(array, _document) {
             ? _document.getElementById(el.substring(1))
             : _document.createElement(el);
 
-    for (var i=1, l=array.length; i<l; i++) {
-        var a = array[i];
+    for (var a of array.slice(1)) {
         if (!valid(a, array))
             continue;
         else if (a.constructor === Array) {
@@ -37,16 +36,15 @@ function jsml(array, _document) {
                 el.appendChild(jsml(a, _document));
         }
         else if (a.constructor === Object)
-            for (var p in a) {
-                var ap = a[p];
-                if (valid(ap,a) && ap.constructor === Object)
-                  for (var s in ap)
-                    el[p][s] = ap[s];
+            for (let [k,v] of Object.entries(a)) {
+                if (valid(v,a) && v.constructor === Object)
+                    for (let [sk,sv] of Object.entries(v))
+                        el[k][sk] = sv;
                 else
                     if (_document === window.document)
-                        el[p] = ap;
+                        el[k] = v;
                     else
-                        el.setAttribute(p, ap);
+                        el.setAttribute(k, v);
             }
         else if (typeof a.nodeType === "number")
             el.appendChild(a);
