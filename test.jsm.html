@@ -11,6 +11,7 @@
     <div id="outside-els-test"></div>
     <ul  id="multiple-args-test"></ul>
     <div id="dom-nested-array"></div>
+    <div id="dom-nested-array2"></div>
     <div id="empty-array-test"></div>
     <div id="null-element-test"></div>
     <div id="null-element-test2"></div>
@@ -45,6 +46,7 @@
                                                                         ["li", "arg 3"]]));
 
         jsml(["#dom-nested-array", ["h1", "DOM Nested 1"], ["div", [jsml(["b", "1"]), jsml(["i", "2"]), jsml(["span", {style:{textDecoration:"underline"}},"3"])]]]);
+        jsml(["#dom-nested-array2", ["h1", "DOM Nested 2"], ["div", jsml(["b", "1"]), jsml(["i", "2"]), jsml(["span", {style:{textDecoration:"underline"}},"3"])]]);
 
         document.getElementById("empty-array-test").appendChild(jsml([["li", "arg 1"], [],
                                                                       ["li", "arg 2"], [],
