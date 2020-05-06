@@ -1,0 +1,70 @@
+<html>
+  <head>
+    <title></title>
+  </head>
+  <body>
+    <h1>Test</h1>
+
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.js"></script>
+    <script type="text/javascript" src="jsml.js"></script>
+
+    <div id="test-div"></div>
+    <div id="my-element"></div>
+    <div id="array-test"></div>
+    <div id="outside-els-test"></div>
+    <ul  id="multiple-args-test"></ul>
+    <div id="dom-nested-array"></div>
+    <div id="empty-array-test"></div>
+    <div id="null-element-test"></div>
+    <div id="null-element-test2"></div>
+
+    <script type="module">
+        import { jsml } from "./jsml.mjs";
+        var table = ["table", { border: "true" },
+                     ["tbody",
+                      ["tr", ["td", "Cell 0,0"], ["td", "Cell 1,0"], ["td", "Cell 2,0"]],
+                      ["tr", ["td", "Cell 0,1"], ["td", "Cell 1,1"], ["td", "Cell 2,1"]],
+                      ["tr", ["td", "Cell 0,2"], ["td", "Cell 1,2"], ["td", "Cell 2,2"]]]];
+        document.getElementById("test-div").appendChild(jsml(table));
+        var a_random_variable = "</li> uh oh, bad stuff in here <script>";
+        document.getElementById("my-element").appendChild(jsml(["ul",
+                                                                ["li", { style: { backgroundColor: "red" } }, "First item"],
+                                                                ["li",
+                                                                 ["img", { src: "http://www.google.com/favicon.ico", alt: "some alt-text"},
+                                                                  { title: "A Title" }], a_random_variable]]));
+
+
+        var a = [["li", "Item 1"],
+                 ["li", "Item 2"],
+                 ["li", "Item 3"]];
+        document.getElementById("array-test").appendChild(jsml(["div", ["h1", "Nested array"], ["ul", a]]));
+
+        var li1 = document.createElement("li");
+        li1.appendChild(document.createTextNode("document.create()"));
+        document.getElementById("outside-els-test").appendChild(jsml(["div", ["h1", "Outside elements"]]));
+
+        document.getElementById("multiple-args-test").appendChild(jsml([["li", "arg 1"],
+                                                                        ["li", "arg 2"],
+                                                                        ["li", "arg 3"]]));
+
+        document.getElementById("dom-nested-array")
+            .appendChild(jsml([["h1", "DOM Nested"], ["ul", [$.fn.jsml.dom(["li", "1"]), $.fn.jsml.dom(["li", "2"]), $.fn.jsml.dom(["li", "3"])]]]));
+
+        document.getElementById("empty-array-test").appendChild(jsml([["li", "arg 1"], [],
+                                                                      ["li", "arg 2"], [],
+                                                                      ["li", "arg 3"], [[],[]]]));
+
+    try {
+        jsml(["li", "arg 1", null]);
+    } catch(e) {
+        document.getElementById("null-element-test").appendChild(jsml(['span', "Correctly got an error: ", e]));
+    }
+    try {
+        jsml([["li", "arg 1"], null]);
+    } catch(e) {
+        document.getElementById("null-element-test2").appendChild(jsml(['span', "Correctly got an error: ", e]));
+    }
+    </script>
+
+  </body>
+</html>
