@@ -45,7 +45,7 @@ function jsml(array, _document) {
         else if (typeof a.nodeType === "number")
             el.appendChild(a);
         else if (typeof a  === "function")
-            a(el)
+            a(el) // ['div', _=>some_var=_ ] save reference to deep element
         else
             el.appendChild(_document.createTextNode(a));
     }
