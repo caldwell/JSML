@@ -14,17 +14,12 @@ function jsml(array, _document) {
     if (array.constructor === String) // allows for jsml("Plain text")
         return _document.createTextNode(array);
 
-    if (!array.length) return []; // [['div'],[]] => [['div']]
+    if (!array.length) return _document.createDocumentFragment(); // [['div'],[]] => [['div']]
     if (array[0].constructor === Array) { // [[],[],...] ==> [],[],...
-        var f = _document.createFragment();
-        for (var i=0, l=array.length; i<l; i++) {
-            n = jsml(array[i], _document);
-            if (n.constructor === Array)
-                r=r.concat(n);
-            else
-                r.push(n);
-        }
-        return r;
+        var f = _document.createDocumentFragment();
+        for (var i=0, l=array.length; i<l; i++)
+            f.appendChild(jsml(array[i], _document));
+        return f;
     }
 
     var el = array[0];
@@ -38,14 +33,8 @@ function jsml(array, _document) {
         if (!valid(a, array))
             continue;
         else if (a.constructor === Array) {
-            if (a.length !== 0) {
-                var n = jsml(a, _document);
-                if (n.constructor == Array)
-                    for (var $i=0, $l=n.length; $i<$l; $i++)
-                        el.appendChild(n[$i]);
-                else
-                    el.appendChild(n);
-            }
+            if (a.length !== 0)
+                el.appendChild(jsml(a, _document));
         }
         else if (a.constructor === Object)
             for (var p in a) {
