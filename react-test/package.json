@@ -1,0 +1,15 @@
+{
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
+  },
+  "dependencies": {
+    "@babel/core": "^7.12.3",
+    "@babel/preset-env": "^7.12.1",
+    "babelify": "^10.0.0",
+    "browserify": "^17.0.0",
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0"
+  }
+}

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -ex
+#./node_modules/.bin/browserify  -t babelify --outfile jsml-react-bundle.js -r ./jsml-react.mjs:jsml-react -r react/cjs/react.production.min.js:react
+#./node_modules/.bin/browserify  -t babelify --outfile react-dom-bundle.js -r react-dom/cjs/react-dom.production.min.js:react-dom
+./node_modules/.bin/browserify  -t babelify --outfile jsml-react-bundle.js -r ./jsml-react.mjs:jsml-react -r react/cjs/react.development.js:react
+./node_modules/.bin/browserify  -t babelify --outfile react-dom-bundle.js -r react-dom/cjs/react-dom.development.js:react-dom

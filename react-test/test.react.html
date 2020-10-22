@@ -1,0 +1,123 @@
+<html>
+  <head>
+    <title></title>
+  </head>
+  <body>
+    <h1>Test</h1>
+
+    <div id="app"></div>
+
+    <script src="jsml-react-bundle.js"></script>
+    <script src="react-dom-bundle.js"></script>
+    <script>
+      var jsr = require("jsml-react").jsr;
+
+      var Component = require('react').Component;
+      class TestDiv extends Component {
+          render() {
+              return jsr(["table", { border: "true" },
+                          ["tbody",
+                           ["tr", ["td", "Cell 0,0"], ["td", "Cell 1,0"], ["td", "Cell 2,0"]],
+                           ["tr", ["td", "Cell 0,1"], ["td", "Cell 1,1"], ["td", "Cell 2,1"]],
+                           ["tr", ["td", "Cell 0,2"], ["td", "Cell 1,2"], ["td", "Cell 2,2"]]]]);
+          }
+      }
+
+      var a_random_variable = "</li> uh oh, bad stuff in here <script>";
+      class MyElement extends Component {
+          render() {
+              return jsr(["ul",
+                          ["li", { style: { backgroundColor: "red" } }, "First item"],
+                          ["li",
+                           ["img", { src: "http://www.google.com/favicon.ico", alt: "some alt-text"},
+                            { title: "A Title" }], a_random_variable]]);
+          }
+      }
+
+
+      class ArrayTest extends Component {
+          render() {
+              var a = [["li", "Item 1"],
+                       ["li", "Item 2"],
+                       ["li", "Item 3"]];
+              return jsr(["div", ["h1", "Nested array"], ["ul", a]]);
+          }
+      }
+
+      class MultipleArgsTest extends Component {
+          render() {
+              return jsr([["li", "arg 1"],
+                          ["li", "arg 2"],
+                          ["li", "arg 3"]]);
+          }
+      }
+
+      class DomNestedArray extends Component {
+          render() {
+              return jsr([["h1", "DOM Nested 1"], ["div", [jsr(["b", "1"]), jsr(["i", "2"]), jsr(["span", {style:{textDecoration:"underline"}},"3"])]]]);
+          }
+      }
+
+      class DomNestedArray2 extends Component {
+          render() {
+              return jsr([["h1", "DOM Nested 2"], ["div", jsr(["b", "1"]), jsr(["i", "2"]), jsr(["span", {style:{textDecoration:"underline"}},"3"])]]);
+          }
+      }
+
+      class EmptyArrayTest extends Component {
+          render() {
+              return jsr([["li", "arg 1"], [],
+                          ["li", "arg 2"], [],
+                          ["li", "arg 3"], [[],[]]]);
+          }
+      }
+
+      class IgnoredTest extends Component {
+          render() {
+              let a = false, b = true;
+              return jsr(["ul",
+                          a && ["li", "Shouldn't show up"],
+                          b && ["li", "Should render"],
+                          null, undefined,
+                          ["li", "Last one"]]);
+          }
+      }
+
+      class NullPropertyTest extends Component {
+          render() {
+              try {
+                  return jsr(["li", "arg 1", { blah: null }]);
+              } catch(e) {
+                  return jsr(['span', "Correctly got an error: ", e]);
+              }
+          }
+      }
+
+      class App extends Component {
+          render() {
+              return jsr([[TestDiv],
+                          [MyElement],
+                          [ArrayTest],
+                          [MultipleArgsTest],
+                          [DomNestedArray],
+                          [DomNestedArray2],
+                          [EmptyArrayTest],
+                          [NullPropertyTest],
+                          [IgnoredTest],
+                         ]);
+          }
+      }
+
+      var react_dom = require('react-dom');
+      react_dom.render(jsr([[App],
+                            ['div',
+                             ['h1', "Raw elements with no state"],
+                             ['ul',
+                              ['li', 'one'],
+                              ['li', 'two'],
+                              ['li', 'three'],
+                             ]]]),
+                       document.getElementById("app"));
+    </script>
+  </body>
+</html>
