@@ -1,6 +1,6 @@
 {
   "name": "@caldwell/jsml",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "a compact representation of HTML using Javascript arrays and objects.",
   "main": "jsml.js",
   "scripts": {
