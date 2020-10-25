@@ -5,6 +5,46 @@
 
 (function($) {
     "use strict";
+
+    var valid = function (a, array) {
+        if (a === undefined || a === null)
+            throw("undefined value in: " + JSON.stringify(array));
+        else
+            return true;
+    };
+    var omerge = function (a, b) {
+        for (var p in a) {
+            if (!a.hasOwnProperty(p)) continue;
+            var ap = a[p];
+            if (valid(ap,a) && ap.constructor === Object)
+                omerge(ap, b[p]);
+            else
+                b[p] = ap;
+        }
+    };
+    var processContent = function(array, start, el) {
+        for (var i = start, l = array.length; i < l; i++) {
+            var a = array[i];
+            if (!valid(a, array))
+                continue;
+            if (a.constructor === Array) {
+                if (a.length === 0 || (a[0].constructor === Array || a[0].constructor === $ || typeof a[0].nodeType !== "undefined")) {
+                    processContent(a, 0, el); // [[],[],...] ==> [],[],...
+                } else
+                    el.appendChild(jsml.dom(a));
+            }
+            else if (typeof a.nodeType !== "undefined")
+                el.appendChild(a);
+            else if (a.constructor === $)
+                for (var $i = 0, $l = a.length; $i < $l; $i++ )
+                    el.appendChild(a[$i]);
+            else if (a.constructor === Object)
+                omerge(a, el);
+            else
+                el.appendChild(document.createTextNode(a));
+        }
+    };
+
     var jsml = function() {
         var el = jsml.dom.apply(this, arguments);
         if (arguments.length === 1)
@@ -25,59 +65,18 @@
     };
 
     jsml.dom = function (array) {
-        var i, j, l, $i, $l;
-
         if (arguments.length > 1) {
             var results = [];
-            for (i=0; i<arguments.length; i++)
+            for (var i=0; i<arguments.length; i++)
                 results[i] = jsml.dom(arguments[i]);
             return results;
         }
 
-        var valid = function (a, array) {
-            if (a === undefined || a === null)
-                throw("undefined value in: " + JSON.stringify(array));
-            else
-                return true;
-        };
         if (array.constructor === String)
             return document.createTextNode(array);
         var el = document.createElement(array[0]);
 
-        for (i=1, l=array.length; i<l; i++) {
-            var a = array[i];
-            if (!valid(a, array))
-                continue;
-            if (a.constructor === Array) {
-                if (a.length === 0 || (a[0].constructor === Array || a[0].constructor === $ || typeof a[0].nodeType !== "undefined")) {
-                    for (j in a) // [[],[],...] ==> [],[],...
-                        if (a[j].constructor === Array)
-                            el.appendChild(jsml.dom(a[j]));
-                        else if (a[j].constructor === $)
-                            for ($i = 0, $l = a[j].length; $i < $l; $i++ )
-                                el.appendChild(a[j][$i]);
-                        else if (typeof a[j].nodeType !== "undefined")
-                            el.appendChild(a[j]);
-                } else
-                    el.appendChild(jsml.dom(a));
-            }
-            else if (typeof a.nodeType !== "undefined")
-                el.appendChild(a);
-            else if (a.constructor === $)
-                for ($i = 0, $l = a.length; $i < $l; $i++ )
-                    el.appendChild(a[$i]);
-            else if (a.constructor === Object)
-                for (var p in a) {
-                    var ap = a[p];
-                    if (valid(ap,a) && ap.constructor === Object)
-                        for (var s in ap)
-                            el[p][s] = ap[s];
-                    else
-                        el[p] = ap;
-                }
-            else
-                el.appendChild(document.createTextNode(a));
-        }
+        processContent(array, 1, el);
         return el;
     };
 
