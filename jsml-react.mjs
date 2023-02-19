@@ -32,7 +32,7 @@ function jsr(array) {
             children.push(a);
         else if (a.constructor === Object)
             for (let [k,v] of Object.entries(a)) {
-                if (valid(v,a) && v.constructor === Object) {
+                if (valid(v,a) && typeof el == "string" && v.constructor === Object) {
                     props[k] = {};
                     for (let [sk,sv] of Object.entries(v))
                         props[k][sk] = sv;
