@@ -6,7 +6,12 @@
 import { Fragment, createElement } from 'react';
 
 function jsr(array) {
-    var valid = (a, array) => a !== undefined && a !== null || (() => { throw("undefined value in: " + JSON.stringify(array)) })();
+    var dump = (array) => JSON.stringify(array, (_,v) => v==undefined ? null : v); // Convert undefined to null so the bad key shows up
+    var pathstr = (path) => path.map(p => typeof p == "string"    ? `<${p}>`
+                                        : typeof p == "function"  ? `<${p.name}()>`
+                                        : p == Fragment           ? `<React.Fragment>`
+                                                                  : '<???>').join(" -> ");
+    var valid = (a, array) => a !== undefined && a !== null || (() => { throw(`undefined value in ${pathstr(path)}: ${dump(array)}`) })();
     let react_ignored = (a) => a == undefined || a == null || a === false || a === true;
 
     if (array.constructor === String) return array.toString(); // allows for jsml("Plain text") (which is only valid in react when recursing)
