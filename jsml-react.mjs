@@ -5,7 +5,7 @@
 
 import { Fragment, createElement } from 'react';
 
-function jsr(array) {
+function jsr(array, path=[]) {
     var dump = (array) => JSON.stringify(array, (_,v) => v==undefined ? null : v); // Convert undefined to null so the bad key shows up
     var pathstr = (path) => path.map(p => typeof p == "string"    ? `<${p}>`
                                         : typeof p == "function"  ? `<${p.name}()>`
@@ -19,7 +19,7 @@ function jsr(array) {
     if (!array.length) return []; // [['div'],[]] => [['div']]
 
     if (array[0].constructor === Array || array[0].$$typeof == Symbol.for('react.element')) { // [[],[],...] ==> [],[],...
-        return createElement(Fragment, null, ...array.map((e) => jsr(e)));
+        return createElement(Fragment, null, ...array.map((e) => jsr(e, path)));
     }
 
     var el = array[0];
@@ -31,7 +31,7 @@ function jsr(array) {
             continue;
         else if (a.constructor === Array) {
             if (a.length !== 0)
-                children.push(jsr(a));
+                children.push(jsr(a, [...path, el]));
         }
         else if (a.$$typeof == Symbol.for('react.element'))
             children.push(a);
