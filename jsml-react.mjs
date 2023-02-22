@@ -5,7 +5,9 @@
 
 import { Fragment, createElement } from 'react';
 
-function jsr(array, path=[]) {
+function jsr(array) { return jsr_inner(array); }
+
+function jsr_inner(array, path=[]) {
     var dump = (array) => JSON.stringify(array, (_,v) => v==undefined ? null : v); // Convert undefined to null so the bad key shows up
     var pathstr = (path) => path.map(p => typeof p == "string"    ? `<${p}>`
                                         : typeof p == "function"  ? `<${p.name}()>`
