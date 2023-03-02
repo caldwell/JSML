@@ -21,7 +21,7 @@ function jsr_inner(array, path=[]) {
     if (!array.length) return []; // [['div'],[]] => [['div']]
 
     if (array[0].constructor === Array || array[0].$$typeof == Symbol.for('react.element')) { // [[],[],...] ==> [],[],...
-        return createElement(Fragment, null, ...array.map((e) => jsr(e, path)));
+        return createElement(Fragment, null, ...array.map((e) => jsr_inner(e, path)));
     }
 
     var el = array[0];
@@ -33,7 +33,7 @@ function jsr_inner(array, path=[]) {
             continue;
         else if (a.constructor === Array) {
             if (a.length !== 0)
-                children.push(jsr(a, [...path, el]));
+                children.push(jsr_inner(a, [...path, el]));
         }
         else if (a.$$typeof == Symbol.for('react.element'))
             children.push(a);
