@@ -21,7 +21,7 @@ function jsr_inner(array, path=[]) {
     if (!array.length) return []; // [['div'],[]] => [['div']]
 
     if (array[0].constructor === Array || array[0].$$typeof == Symbol.for('react.element')) { // [[],[],...] ==> [],[],...
-        return createElement(Fragment, null, ...array.map((e) => jsr_inner(e, path)));
+        return createElement(Fragment, null, ...array.map((e) => react_ignored(e) || jsr_inner(e, path)));
     }
 
     var el = array[0];
