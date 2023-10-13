@@ -20,6 +20,8 @@
         return this;
     };
 
+    jsml.elements = {};
+
     jsml.make = function (value) {
         return $(jsml.dom(value));
     };
@@ -42,6 +44,19 @@
         };
         if (array.constructor === String)
             return document.createTextNode(array);
+
+        if (jsml.elements.hasOwnProperty(array[0])) {
+            var ex = jsml.elements[array[0]](array);
+            if (ex.constructor === Array)
+                return jsml.dom(ex);
+            else if (typeof ex.nodeType !== "undefined")
+                return ex;
+            else if ((ex.constructor === $) && (ex.length >= 1))
+                return ex[0];
+            else
+                return document.createTextNode(ex);
+        }
+
         var el = document.createElement(array[0]);
 
         for (i=1, l=array.length; i<l; i++) {
